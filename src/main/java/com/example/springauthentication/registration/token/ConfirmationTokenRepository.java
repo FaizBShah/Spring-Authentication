@@ -1,4 +1,4 @@
-package com.example.springauthentication.appuser;
+package com.example.springauthentication.registration.token;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -6,16 +6,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Long> {
 
-    Optional<AppUser> findByEmail(String email);
+    Optional<ConfirmationToken> findByToken(String token);
 
     @Transactional
     @Modifying
-    @Query("UPDATE AppUser a SET a.enabled = true WHERE a.email = ?1")
-    int enableAppUser(String email);
+    @Query("UPDATE ConfirmationToken c SET c.confirmedAt = ?2 WHERE c.token = ?1")
+    int updateConfirmedAt(String token, LocalDateTime confirmedAt);
 }
